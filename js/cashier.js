@@ -324,18 +324,10 @@ const Cashier = {
             <span class="profile-add-value">${client.stamps} tampons</span>
           </div>
           <div class="form-group">
-            <label>Nombre de tampons à ajouter</label>
-            <div class="stamps-add-btns">
-              <button class="btn btn-outline" onclick="Cashier.addStampsFromProfile(1)">+1</button>
-              <button class="btn btn-outline" onclick="Cashier.addStampsFromProfile(2)">+2</button>
-              <button class="btn btn-outline" onclick="Cashier.addStampsFromProfile(3)">+3</button>
-              <button class="btn btn-primary" onclick="Cashier.addStampsFromProfile(5)">+5</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Retirer un tampon</label>
+            <label>Tampons</label>
             <div class="stamps-add-btns">
               <button class="btn btn-danger" onclick="Cashier.removeStampsFromProfile(1)">−1</button>
+              <button class="btn btn-primary" onclick="Cashier.addStampsFromProfile(1)">+1</button>
             </div>
           </div>
         </div>

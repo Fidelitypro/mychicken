@@ -128,8 +128,12 @@ const Store = {
     client.stamps = newStamps;
 
     // Remove pending rewards whose threshold the client no longer meets
+    // Only apply to rewards from the current cycle — previous-cycle rewards are preserved
+    const currentCycle = client.cycle || 1;
     client.pendingRewards = (client.pendingRewards || []).filter(r => {
       if (!r.key.startsWith('stamps_')) return true;
+      const keyCycle = parseInt(r.key.match(/_c(\d+)$/)?.[1] || '1');
+      if (keyCycle < currentCycle) return true; // keep rewards from previous cycles
       return newStamps >= r.threshold;
     });
 
