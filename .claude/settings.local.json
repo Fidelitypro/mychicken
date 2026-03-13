@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(css|html|js\\)$\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where npx:*)",
+      "Bash(where node:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://fidelitypro.github.io/carte-de-fidelite/)",
+      "Bash(cp -r \"E:/Desktop/Claude/Carte de Fidélité/loyalty-app.copie_test\" \"E:/Desktop/Claude/Carte de Fidélité/MODELE\")",
+      "Bash(rm -f \"E:/Desktop/Claude/Carte de Fidélité/MODELE/Informations Clients/\"*.csv)",
+      "Bash(rm -rf \"E:/Desktop/Claude/Carte de Fidélité/MODELE/.git\")"
+    ]
+  }
+}

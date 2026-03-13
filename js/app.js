@@ -24,6 +24,7 @@ const App = {
     });
 
     this._checkDailyBackup();
+    this._initFullscreen();
   },
 
   _checkDailyBackup() {
@@ -157,6 +158,28 @@ const App = {
       document.getElementById('pin-error').style.display = 'block';
       document.getElementById('cashier-pin-input').value = '';
       document.getElementById('cashier-pin-input').focus();
+    }
+  },
+
+  _initFullscreen() {
+    const updateIcon = () => {
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      document.getElementById('fs-expand-icon').style.display = isFs ? 'none' : '';
+      document.getElementById('fs-compress-icon').style.display = isFs ? '' : 'none';
+    };
+    document.addEventListener('fullscreenchange', updateIcon);
+    document.addEventListener('webkitfullscreenchange', updateIcon);
+  },
+
+  toggleFullscreen() {
+    const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!isFs) {
+      const el = document.documentElement;
+      const req = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (req) req.call(el);
+    } else {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document);
     }
   },
 

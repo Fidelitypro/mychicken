@@ -81,6 +81,25 @@ body {
 }
 .tab-btn.active svg { stroke: var(--white); }
 
+/* ===== FULLSCREEN BUTTON ===== */
+.fullscreen-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgba(0,0,0,0.15);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--header-text);
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.fullscreen-btn:hover { border-color: var(--header-text); opacity: 1; }
+.fullscreen-btn svg { stroke: var(--header-text); }
+
 /* ===== TABS ===== */
 .tab-content { display: none; padding: 24px; min-height: calc(100vh - 65px); }
 .tab-content.active { display: block; }

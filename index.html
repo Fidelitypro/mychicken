@@ -21,6 +21,14 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
         Caisse
       </button>
+      <button id="btn-fullscreen" class="fullscreen-btn" onclick="App.toggleFullscreen()" title="Plein écran">
+        <svg id="fs-expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+        <svg id="fs-compress-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+          <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -37,7 +45,7 @@
         <p class="login-subtitle">Carte de fidélité</p>
         <div class="form-group">
           <label for="login-phone">Numéro de téléphone</label>
-          <input type="tel" id="login-phone" placeholder="06 12 34 56 78" maxlength="14" autocomplete="off">
+          <input type="tel" id="login-phone" placeholder="06 12 34 56 78" maxlength="14" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
         </div>
         <div class="form-group" id="login-name-group" style="display:none;">
           <label for="login-name">Votre prénom et nom</label>
@@ -123,7 +131,7 @@
       <p>Client : <strong id="amount-client-name"></strong></p>
       <p class="amount-ratio" id="amount-ratio"></p>
       <div class="amount-input-wrap">
-        <input type="number" id="amount-input" min="0" step="0.01" placeholder="0.00" oninput="Client.handleAmountInput()">
+        <input type="number" id="amount-input" min="0" step="0.01" placeholder="0.00" oninput="Client.handleAmountInput()" inputmode="decimal">
         <span class="amount-currency">€</span>
       </div>
       <p class="amount-calc" id="amount-calc"></p>
@@ -169,7 +177,7 @@
       <h2>Accès Caisse</h2>
       <p>Entrez le code PIN commerçant</p>
       <div class="pin-input-container">
-        <input type="password" id="cashier-pin-input" maxlength="6" placeholder="••••" autocomplete="off">
+        <input type="password" id="cashier-pin-input" maxlength="6" placeholder="••••" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
       </div>
       <div class="modal-actions">
         <button class="btn btn-outline" onclick="App.closePinModal()">Annuler</button>
@@ -443,7 +451,7 @@
             <div class="cfg-section-title"><span>🔐</span> Sécurité</div>
             <div class="form-group">
               <label for="cfg-pin">Code PIN caisse</label>
-              <input type="text" id="cfg-pin" maxlength="6" placeholder="1234">
+              <input type="text" id="cfg-pin" maxlength="6" placeholder="1234" inputmode="numeric" pattern="[0-9]*">
             </div>
             <div class="form-group">
               <label class="checkbox-label">
@@ -536,7 +544,7 @@
           </div>
           <div class="form-group">
             <label for="edit-phone">Téléphone</label>
-            <input type="tel" id="edit-phone">
+            <input type="tel" id="edit-phone" inputmode="numeric" pattern="[0-9]*">
           </div>
         </div>
         <div class="form-row">
