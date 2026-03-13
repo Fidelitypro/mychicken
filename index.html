@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Carte de Fidélité</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- ===== HEADER ===== -->
+  <header id="app-header">
+    <div class="header-left">
+      <span id="header-shop-name">Mon Commerce</span>
+    </div>
+    <div class="header-right">
+      <button id="btn-tab-client" class="tab-btn active" onclick="App.switchTab('client')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Client
+      </button>
+      <button id="btn-tab-cashier" class="tab-btn" onclick="App.switchTab('cashier')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+        Caisse
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== CLIENT TAB ===== -->
+  <main id="tab-client" class="tab-content active">
+    <!-- Login Screen -->
+    <div id="client-login" class="client-screen active">
+      <div class="login-card">
+        <div class="login-logo" id="login-logo">
+          <img id="login-logo-img" src="" alt="Logo" style="display:none;">
+          <svg id="login-logo-svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h1 id="login-shop-title">Mon Commerce</h1>
+        <p class="login-subtitle">Carte de fidélité</p>
+        <div class="form-group">
+          <label for="login-phone">Numéro de téléphone</label>
+          <input type="tel" id="login-phone" placeholder="06 12 34 56 78" maxlength="14" autocomplete="off">
+        </div>
+        <div class="form-group" id="login-name-group" style="display:none;">
+          <label for="login-name">Votre prénom et nom</label>
+          <input type="text" id="login-name" placeholder="Jean Dupont" autocomplete="off">
+        </div>
+        <button id="btn-login" class="btn btn-primary btn-large" onclick="Client.handleLogin()">
+          Se connecter
+        </button>
+        <p id="login-message" class="login-msg"></p>
+      </div>
+    </div>
+
+    <!-- Card Screen -->
+    <div id="client-card" class="client-screen">
+      <!-- Pending rewards notification -->
+      <div id="pending-rewards-banner" class="pending-rewards-banner" style="display:none;">
+        <span class="pending-rewards-icon">🎁</span>
+        <div class="pending-rewards-text">
+          <strong id="pending-rewards-title"></strong>
+          <span>À récupérer auprès du commerçant</span>
+        </div>
+      </div>
+      <div class="card-container">
+        <div class="card-with-logo">
+          <div class="card-side-logo" id="card-side-logo" style="display:none;">
+            <img id="card-logo-img" class="card-logo-side" src="" alt="">
+          </div>
+          <div id="loyalty-card" class="loyalty-card">
+            <div class="card-header-section">
+              <h2 class="card-shop-name">Mon Commerce</h2>
+              <span class="card-badge">FIDÉLITÉ</span>
+            </div>
+            <div class="card-client-name" id="card-client-name">Jean Dupont</div>
+            <div id="card-points-section" class="card-points-section">
+              <div class="points-circle">
+                <span class="points-value" id="card-points-value">0</span>
+                <span class="points-label">points</span>
+              </div>
+              <div class="points-info">
+                <div class="progress-bar-container">
+                  <div class="progress-bar" id="card-progress-bar" style="width:0%"></div>
+                </div>
+                <p class="progress-text" id="card-progress-text">0 / 100 points</p>
+              </div>
+            </div>
+            <div id="card-stamps-section" class="card-stamps-section" style="display:none;">
+              <div class="stamps-grid" id="card-stamps-grid"></div>
+            </div>
+            <div class="card-rewards-list" id="card-rewards-list"></div>
+          </div>
+        </div>
+
+        <div class="card-stats">
+          <div class="stat-item" id="stat-orders-item">
+            <span class="stat-value" id="stat-orders">0</span>
+            <span class="stat-label">Visites</span>
+          </div>
+          <div class="stat-item" id="stat-spent-item">
+            <span class="stat-value" id="stat-spent">0€</span>
+            <span class="stat-label">Dépensé</span>
+          </div>
+          <div class="stat-item" id="stat-since-item">
+            <span class="stat-value" id="stat-since">-</span>
+            <span class="stat-label">Membre depuis</span>
+          </div>
+        </div>
+
+      </div>
+      <button class="btn btn-outline btn-logout" onclick="Client.logout()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Déconnexion
+      </button>
+    </div>
+  </main>
+
+  <!-- ===== AMOUNT MODAL (points mode - shown at login) ===== -->
+  <div id="amount-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-card amount-modal-card">
+      <div class="amount-modal-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <h2>Montant de l'achat</h2>
+      <p>Client : <strong id="amount-client-name"></strong></p>
+      <p class="amount-ratio" id="amount-ratio"></p>
+      <div class="amount-input-wrap">
+        <input type="number" id="amount-input" min="0" step="0.01" placeholder="0.00" oninput="Client.handleAmountInput()">
+        <span class="amount-currency">€</span>
+      </div>
+      <p class="amount-calc" id="amount-calc"></p>
+      <div class="modal-actions amount-actions">
+        <button class="btn btn-outline" onclick="Client.skipAmount()">Passer</button>
+        <button class="btn btn-primary btn-large" onclick="Client.confirmAmount()">
+          Valider
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DAILY BACKUP BANNER ===== -->
+  <div id="backup-banner" class="backup-banner" style="display:none;">
+    <div class="backup-banner-content">
+      <span class="backup-banner-icon">💾</span>
+      <div class="backup-banner-text">
+        <strong>Sauvegarde quotidienne</strong>
+        <span>Exportez vos clients pour sécuriser vos données</span>
+      </div>
+      <div class="backup-banner-actions">
+        <button class="btn btn-small backup-btn-download" onclick="App.confirmDailyBackup()">Télécharger</button>
+        <button class="btn btn-small backup-btn-skip" onclick="App.skipDailyBackup()">Passer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REWARD BANNER ===== -->
+  <div id="reward-banner" class="reward-banner" style="display:none;">
+    <div class="reward-banner-content">
+      <span class="reward-banner-icon">🎉</span>
+      <div>
+        <strong>Récompense débloquée !</strong>
+        <p id="reward-banner-text"></p>
+      </div>
+      <button class="reward-banner-close" onclick="Client.closeRewardBanner()">&times;</button>
+    </div>
+  </div>
+
+  <!-- ===== CASHIER PIN MODAL ===== -->
+  <div id="cashier-pin-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <h2>Accès Caisse</h2>
+      <p>Entrez le code PIN commerçant</p>
+      <div class="pin-input-container">
+        <input type="password" id="cashier-pin-input" maxlength="6" placeholder="••••" autocomplete="off">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="App.closePinModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="App.validatePin()">Valider</button>
+      </div>
+      <p id="pin-error" class="login-msg error" style="display:none;">Code PIN incorrect</p>
+    </div>
+  </div>
+
+  <!-- ===== CASHIER TAB ===== -->
+  <main id="tab-cashier" class="tab-content">
+    <div class="cashier-nav">
+      <button class="cashier-nav-btn active" data-section="clients" onclick="Cashier.switchSection('clients')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Clients
+      </button>
+      <button class="cashier-nav-btn" data-section="customize" onclick="Cashier.switchSection('customize')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Personnaliser
+      </button>
+    </div>
+
+    <!-- Clients Section -->
+    <section id="cashier-clients" class="cashier-section active">
+      <div class="section-header">
+        <h2>Liste des clients</h2>
+        <div class="section-header-right">
+          <div class="search-bar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="client-search" placeholder="Rechercher un client..." oninput="Cashier.filterClients()">
+          </div>
+          <div class="csv-actions">
+            <button class="btn btn-outline btn-small csv-btn" onclick="Cashier.exportClients()" title="Exporter la liste en CSV">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Exporter
+            </button>
+            <label class="btn btn-outline btn-small csv-btn csv-import-label" title="Importer depuis un CSV">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Importer
+              <input type="file" id="csv-import-input" accept=".csv,text/csv" onchange="Cashier.importClients(this)">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="clients-table">
+          <thead>
+            <tr>
+              <th data-sort="name" onclick="Cashier.sortBy('name')">Nom <span class="sort-arrow">↕</span></th>
+              <th data-sort="phone" onclick="Cashier.sortBy('phone')">Téléphone <span class="sort-arrow">↕</span></th>
+              <th data-sort="points" onclick="Cashier.sortBy('points')">Points <span class="sort-arrow">↕</span></th>
+              <th data-sort="stamps" onclick="Cashier.sortBy('stamps')">Tampons <span class="sort-arrow">↕</span></th>
+              <th data-sort="totalOrders" onclick="Cashier.sortBy('totalOrders')">Commandes <span class="sort-arrow">↕</span></th>
+              <th data-sort="lastVisit" onclick="Cashier.sortBy('lastVisit')">Dernière visite <span class="sort-arrow">↕</span></th>
+            </tr>
+          </thead>
+          <tbody id="clients-tbody"></tbody>
+        </table>
+        <p id="no-clients" class="empty-msg" style="display:none;">Aucun client enregistré</p>
+      </div>
+    </section>
+
+    <!-- Customize Section -->
+    <section id="cashier-customize" class="cashier-section">
+      <div class="customize-layout">
+        <div class="customize-form">
+          <h2>Personnaliser la carte</h2>
+
+          <!-- ① IDENTITÉ -->
+          <div class="cfg-section">
+            <div class="cfg-section-title"><span>🏪</span> Identité du commerce</div>
+            <div class="form-group">
+              <label for="cfg-shop-name">Nom du commerce</label>
+              <input type="text" id="cfg-shop-name" placeholder="Mon Commerce">
+            </div>
+            <div class="form-group">
+              <label>Logo du commerce</label>
+              <div class="logo-upload-row">
+                <div class="logo-preview-box" id="cfg-logo-preview">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div class="logo-upload-actions">
+                  <label class="btn btn-outline btn-small logo-file-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Choisir un logo
+                    <input type="file" id="cfg-logo-input" accept="image/*" onchange="Customize.handleLogoImage(this)">
+                  </label>
+                  <button type="button" class="btn btn-outline btn-small" onclick="Customize.clearLogoImage()">Supprimer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- ② APPARENCE -->
+          <div class="cfg-section">
+            <div class="cfg-section-title"><span>🎨</span> Apparence</div>
+            <div class="form-group">
+              <label>Couleurs de la carte</label>
+              <div class="form-row" style="margin-top:8px;">
+                <div class="form-group">
+                  <label for="cfg-primary-color">Couleur principale</label>
+                  <input type="color" id="cfg-primary-color" value="#E63946">
+                </div>
+                <div class="form-group">
+                  <label for="cfg-secondary-color">Couleur secondaire</label>
+                  <input type="color" id="cfg-secondary-color" value="#457B9D">
+                </div>
+                <div class="form-group">
+                  <label for="cfg-glow-color">Lueur ✨</label>
+                  <input type="color" id="cfg-glow-color" value="#FFD700">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Couleurs du fond d'écran</label>
+              <div class="form-row" style="margin-top:8px;">
+                <div class="form-group">
+                  <label for="cfg-bg-color">Fond principal</label>
+                  <input type="color" id="cfg-bg-color" value="#F1FAEE">
+                </div>
+                <div class="form-group">
+                  <label for="cfg-bg-color2">Fond secondaire</label>
+                  <input type="color" id="cfg-bg-color2" value="#F1FAEE">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Couleurs du header</label>
+              <div class="form-row" style="margin-top:8px;">
+                <div class="form-group">
+                  <label for="cfg-header-bg">Fond du header</label>
+                  <input type="color" id="cfg-header-bg" value="#FFFFFF">
+                </div>
+                <div class="form-group">
+                  <label for="cfg-header-text">Texte du header</label>
+                  <input type="color" id="cfg-header-text" value="#E63946">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Image de fond d'écran</label>
+              <div class="logo-upload-row">
+                <div class="logo-preview-box" id="cfg-bg-preview" style="border-radius: 8px; background-size: cover; background-position: center;">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div class="logo-upload-actions">
+                  <label class="btn btn-outline btn-small logo-file-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Choisir une image
+                    <input type="file" id="cfg-bg-input" accept="image/*" onchange="Customize.handleBgImage(this)">
+                  </label>
+                  <button type="button" class="btn btn-outline btn-small" onclick="Customize.clearBgImage()">Supprimer</button>
+                </div>
+              </div>
+              <p style="font-size:0.78rem; color:var(--text-light); margin-top:6px;">Sans image, les couleurs de fond seront utilisées.</p>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- ③ PROGRAMME DE FIDÉLITÉ -->
+          <div class="cfg-section">
+            <div class="cfg-section-title"><span>🎯</span> Programme de fidélité</div>
+            <div class="form-group">
+              <label>Type de fidélité</label>
+              <div class="toggle-group">
+                <button id="cfg-type-points" class="toggle-btn active" onclick="Customize.setType('points')">Points</button>
+                <button id="cfg-type-stamps" class="toggle-btn" onclick="Customize.setType('stamps')">Tampons</button>
+              </div>
+            </div>
+            <div id="cfg-points-options">
+              <div class="form-group">
+                <label for="cfg-points-per-euro">Points par euro dépensé</label>
+                <input type="number" id="cfg-points-per-euro" min="1" value="1">
+              </div>
+              <div class="form-group">
+                <label>Paliers de récompenses</label>
+                <div id="cfg-rewards-list" class="rewards-list"></div>
+                <button type="button" class="btn btn-outline btn-small" onclick="Customize.addRewardTier('points')">
+                  + Ajouter un palier
+                </button>
+              </div>
+            </div>
+            <div id="cfg-stamps-options" style="display:none;">
+              <div class="form-group">
+                <label for="cfg-stamps-per-row">Tampons par ligne</label>
+                <input type="number" id="cfg-stamps-per-row" min="2" max="10" value="5" oninput="Customize.updatePreview()">
+              </div>
+              <div class="form-group">
+                <label>Images des tampons</label>
+                <div class="stamp-images-grid">
+                  <div class="stamp-image-upload">
+                    <label>Tampon vide</label>
+                    <div class="stamp-image-preview" id="preview-stamp-empty">
+                      <span class="stamp-image-placeholder">?</span>
+                    </div>
+                    <input type="file" id="cfg-stamp-empty" accept="image/*" onchange="Customize.handleStampImage('stampEmpty', this)">
+                    <button type="button" class="btn-icon" onclick="Customize.clearStampImage('stampEmpty')" title="Supprimer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <div class="stamp-image-upload">
+                    <label>Tampon plein</label>
+                    <div class="stamp-image-preview" id="preview-stamp-filled">
+                      <span class="stamp-image-placeholder">?</span>
+                    </div>
+                    <input type="file" id="cfg-stamp-filled" accept="image/*" onchange="Customize.handleStampImage('stampFilled', this)">
+                    <button type="button" class="btn-icon" onclick="Customize.clearStampImage('stampFilled')" title="Supprimer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <div class="stamp-image-upload">
+                    <label>Palier vide</label>
+                    <div class="stamp-image-preview" id="preview-stamp-tier-empty">
+                      <span class="stamp-image-placeholder">?</span>
+                    </div>
+                    <input type="file" id="cfg-stamp-tier-empty" accept="image/*" onchange="Customize.handleStampImage('stampTierEmpty', this)">
+                    <button type="button" class="btn-icon" onclick="Customize.clearStampImage('stampTierEmpty')" title="Supprimer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  <div class="stamp-image-upload">
+                    <label>Palier plein</label>
+                    <div class="stamp-image-preview" id="preview-stamp-tier-filled">
+                      <span class="stamp-image-placeholder">?</span>
+                    </div>
+                    <input type="file" id="cfg-stamp-tier-filled" accept="image/*" onchange="Customize.handleStampImage('stampTierFilled', this)">
+                    <button type="button" class="btn-icon" onclick="Customize.clearStampImage('stampTierFilled')" title="Supprimer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Paliers de récompenses</label>
+                <div id="cfg-stamps-rewards-list" class="rewards-list"></div>
+                <button type="button" class="btn btn-outline btn-small" onclick="Customize.addRewardTier('stamps')">
+                  + Ajouter un palier
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- ④ STATISTIQUES -->
+          <div class="cfg-section">
+            <div class="cfg-section-title"><span>📊</span> Statistiques visibles sur la carte</div>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" id="cfg-stat-visits" checked>
+                <span class="checkbox-label">Nombre de visites</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="cfg-stat-spent" checked>
+                <span class="checkbox-label">Montant dépensé</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="cfg-stat-since" checked>
+                <span class="checkbox-label">Membre depuis</span>
+              </label>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- ⑤ SÉCURITÉ -->
+          <div class="cfg-section">
+            <div class="cfg-section-title"><span>🔐</span> Sécurité</div>
+            <div class="form-group">
+              <label for="cfg-pin">Code PIN caisse</label>
+              <input type="text" id="cfg-pin" maxlength="6" placeholder="1234">
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="cfg-pin-always">
+                Demander le PIN à chaque accès à la caisse
+              </label>
+              <small class="cfg-hint">Empêche les clients d'accéder à la caisse entre deux utilisations.</small>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-large" onclick="Customize.save()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Enregistrer
+          </button>
+          <p id="cfg-saved-msg" class="success-msg" style="display:none;">Configuration sauvegardée !</p>
+        </div>
+        <div class="customize-preview">
+          <h3>Aperçu de la carte</h3>
+          <div class="card-with-logo">
+            <div class="card-side-logo" id="preview-side-logo" style="display:none;">
+              <img id="preview-card-logo-img" class="card-logo-side" src="" alt="">
+            </div>
+            <div id="preview-card" class="loyalty-card preview-scale">
+              <div class="card-header-section">
+                <h2 class="card-shop-name" id="preview-shop-name">Mon Commerce</h2>
+                <span class="card-badge">FIDÉLITÉ</span>
+              </div>
+              <div class="card-client-name">Jean Dupont</div>
+              <div id="preview-points-section" class="card-points-section">
+                <div class="points-circle">
+                  <span class="points-value">45</span>
+                  <span class="points-label">points</span>
+                </div>
+                <div class="points-info">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar" id="preview-progress" style="width:45%"></div>
+                  </div>
+                  <p class="progress-text" id="preview-progress-text">45 / 100 points</p>
+                </div>
+              </div>
+              <div id="preview-stamps-section" class="card-stamps-section" style="display:none;">
+                <div class="stamps-grid" id="preview-stamps-grid"></div>
+              </div>
+              <div class="card-rewards-list" id="preview-rewards-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== CLIENT PROFILE MODAL ===== -->
+  <div id="client-edit-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-card modal-profile">
+      <div class="profile-header">
+        <h2 id="profile-title">Fiche client</h2>
+        <button class="btn-icon" onclick="Cashier.closeEditModal()" title="Fermer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Tab nav -->
+      <div class="profile-tabs">
+        <button class="profile-tab active" data-ptab="info" onclick="Cashier.switchProfileTab('info')">Informations</button>
+        <button class="profile-tab" data-ptab="add" onclick="Cashier.switchProfileTab('add')">Ajouter</button>
+        <button class="profile-tab" data-ptab="rewards" onclick="Cashier.switchProfileTab('rewards')">Récompenses</button>
+        <button class="profile-tab" data-ptab="history" onclick="Cashier.switchProfileTab('history')">Historique</button>
+      </div>
+
+      <!-- Info tab -->
+      <div id="ptab-info" class="profile-tab-content active">
+        <div class="profile-stats-row">
+          <div class="profile-stat">
+            <span class="profile-stat-value" id="profile-points">0</span>
+            <span class="profile-stat-label" id="profile-points-label">Points</span>
+          </div>
+          <div class="profile-stat">
+            <span class="profile-stat-value" id="profile-orders">0</span>
+            <span class="profile-stat-label">Visites</span>
+          </div>
+          <div class="profile-stat">
+            <span class="profile-stat-value" id="profile-spent">0€</span>
+            <span class="profile-stat-label">Dépensé</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-name">Nom</label>
+            <input type="text" id="edit-name">
+          </div>
+          <div class="form-group">
+            <label for="edit-phone">Téléphone</label>
+            <input type="tel" id="edit-phone">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-points">Points</label>
+            <input type="number" id="edit-points" min="0">
+          </div>
+          <div class="form-group">
+            <label for="edit-stamps">Tampons</label>
+            <input type="number" id="edit-stamps" min="0">
+          </div>
+        </div>
+        <p class="profile-meta" id="profile-meta"></p>
+        <div class="modal-actions">
+          <button class="btn btn-danger btn-small" onclick="Cashier.deleteClient()">Supprimer</button>
+          <button class="btn btn-primary" onclick="Cashier.saveClient()">Enregistrer</button>
+        </div>
+      </div>
+
+      <!-- Add tab -->
+      <div id="ptab-add" class="profile-tab-content">
+        <div id="profile-add-container"></div>
+      </div>
+
+      <!-- Rewards tab -->
+      <div id="ptab-rewards" class="profile-tab-content">
+        <div id="profile-rewards-list" class="profile-rewards-list"></div>
+        <p id="profile-no-rewards" class="empty-msg" style="display:none;">Aucune récompense configurée</p>
+      </div>
+
+      <!-- History tab -->
+      <div id="ptab-history" class="profile-tab-content">
+        <ul id="profile-history-list" class="profile-history-list"></ul>
+      </div>
+
+      <input type="hidden" id="edit-client-id">
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast" class="toast" style="display:none;"></div>
+
+  <script src="js/imagestore.js?v=3"></script>
+  <script src="js/clientstore.js?v=3"></script>
+  <script src="js/store.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/client.js?v=3"></script>
+  <script src="js/cashier.js?v=3"></script>
+  <script src="js/customize.js?v=3"></script>
+</body>
+</html>
