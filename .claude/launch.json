@@ -4,8 +4,8 @@
     {
       "name": "loyalty-app",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "3456"],
-      "port": 3456
+      "runtimeArgs": ["-m", "http.server", "3457"],
+      "port": 3457
     }
   ]
 }
