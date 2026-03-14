@@ -244,6 +244,17 @@ body {
   margin-top: 4px;
   opacity: 0.75;
 }
+.cfg-export-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cfg-import-label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 .form-row {
   display: flex;
   gap: 16px;

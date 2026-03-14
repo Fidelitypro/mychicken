@@ -386,6 +386,57 @@ const Customize = {
     App.toast('Configuration sauvegardée !', 'success');
   },
 
+  exportSettings() {
+    const config = Store.getConfig();
+    const data = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      config,
+      images: {
+        logo: ImageStore.getLogo(),
+        bgImage: ImageStore.getBgImage(),
+        stamps: ImageStore.getStampImages()
+      }
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const shopSlug = (config.shopName || 'config').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    a.href = url;
+    a.download = `fidelite-${shopSlug}-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    App.toast('Paramètres exportés !', 'success');
+  },
+
+  importSettings(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data.config) throw new Error('Fichier invalide');
+
+        Store.saveConfig(data.config);
+
+        if (data.images) {
+          ImageStore.saveLogo(data.images.logo || '');
+          ImageStore.saveBgImage(data.images.bgImage || '');
+          if (data.images.stamps) ImageStore.saveImages(data.images.stamps);
+        }
+
+        App.applyConfig();
+        Customize.loadConfig();
+        App.toast('Paramètres importés avec succès !', 'success');
+      } catch (err) {
+        App.toast('Fichier invalide ou corrompu', 'error');
+      }
+      input.value = '';
+    };
+    reader.readAsText(file);
+  },
+
   _esc(str) {
     const div = document.createElement('div');
     div.textContent = str;

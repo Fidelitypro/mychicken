@@ -467,6 +467,25 @@
             Enregistrer
           </button>
           <p id="cfg-saved-msg" class="success-msg" style="display:none;">Configuration sauvegardée !</p>
+
+          <hr style="margin-top:24px;">
+
+          <!-- ⑥ EXPORT / IMPORT -->
+          <div class="cfg-section">
+            <div class="cfg-section-title"><span>📦</span> Sauvegarde de la personnalisation</div>
+            <p style="font-size:0.82rem; color:var(--text-light); margin-bottom:12px;">Exportez tous vos paramètres (couleurs, images, récompenses…) dans un fichier pour les sauvegarder ou les transférer.</p>
+            <div class="cfg-export-row">
+              <button class="btn btn-outline" onclick="Customize.exportSettings()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exporter les paramètres
+              </button>
+              <label class="btn btn-outline cfg-import-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Importer les paramètres
+                <input type="file" id="cfg-import-input" accept=".json,application/json" onchange="Customize.importSettings(this)" style="display:none;">
+              </label>
+            </div>
+          </div>
         </div>
         <div class="customize-preview">
           <h3>Aperçu de la carte</h3>
